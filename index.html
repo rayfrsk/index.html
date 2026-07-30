@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stars Casino 🎰</title>
+    <title>Virt Casino 🎰</title>
     <script src="https://telegram.org"></script>
     <style>
         body {
@@ -46,50 +46,44 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        /* Включается при клике на карту */
+        /* Анимация клика и смена цвета карточки */
+        .card:active {
+            transform: scale(0.95);
+        }
         .card.selected {
             border-color: #f39c12;
             background: #f39c12;
-            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
 
-    <h1>STARS CASINO 🎰</h1>
-    <div class="subtitle">Выбери карту. Ставка: 5 Stars</div>
+    <h1>VIRT CASINO 🎰</h1>
+    <div class="subtitle">Угадай карту! Попытка: 5 Stars</div>
 
     <div class="card-container">
-        <div class="card" id="c1" onclick="selectCard(1)">❓</div>
-        <div class="card" id="c2" onclick="selectCard(2)">❓</div>
-        <div class="card" id="c3" onclick="selectCard(3)">❓</div>
+        <div class="card" id="c1" onclick="buyCard(1)">❓</div>
+        <div class="card" id="c2" onclick="buyCard(2)">❓</div>
+        <div class="card" id="c3" onclick="buyCard(3)">❓</div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        let selectedNumber = null;
-
-        function selectCard(num) {
-            selectedNumber = num;
-            
-            // Сбрасываем выделение со всех карт и красим выбранную
+        function buyCard(num) {
+            // 1. Карточка ТУТ ЖЕ меняет цвет на оранжевый при клике
             document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
             document.getElementById('c' + num).classList.add('selected');
 
-            // Выкатываем большую нижнюю кнопку Телеграма
-            tg.MainButton.text = СТАВКА НА КАРТУ №${num} (5 ⭐️);
-            tg.MainButton.show();
-        }
-
-        // Клик по большой нижней кнопке
-        tg.MainButton.onClick(() => {
-            if (selectedNumber) {
-                tg.sendData("card_" + selectedNumber); 
+            // 2. Вместо отправки данных, мы просто закрываем приложение через полсекунды,
+            // чтобы под ним сразу открылся инвойс, который пришлет бот.
+            setTimeout(() => {
                 tg.close();
-            }
-        });
+            }, 300);
+            
+            // Чтобы бот узнал, какую карту мы выбрали, мы позже свяжем это через бэкенд.
+        }
     </script>
 </body>
 </html>
