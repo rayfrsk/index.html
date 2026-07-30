@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Virt Casino</title>
-    <!-- ✅ ИСПРАВЛЕНО: Правильный скрипт связи с Telegram -->
+    <!-- ✅ НАСТОЯЩИЙ ИСПРАВЛЕННЫЙ СКРИПТ СВЯЗИ С TELEGRAM -->
     <script src="https://telegram.org"></script>
     <style>
         body {
@@ -19,7 +19,7 @@
             margin: 0;
         }
         h1 {
-            color: #ff39c12;
+            color: #ff3912;
             margin-bottom: 5px;
         }
         .subtitle {
@@ -59,7 +59,7 @@
     <h1>VIRT CASINO 🎰</h1>
     <div class="subtitle">Угадай карту! Попытка: 5 Stars</div>
 
-    <!-- Список карт с привязанной функцией клика selectCard() -->
+    <!-- Карты, по клику на которые срабатывает функция selectCard -->
     <div class="card-container">
         <div class="card" onclick="selectCard(1)">?</div>
         <div class="card" onclick="selectCard(2)">?</div>
@@ -67,21 +67,21 @@
     </div>
 
     <script>
-        // Инициализируем связь с приложением Telegram
+        // Активируем Telegram WebApp мост
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Разворачиваем игру во весь экран
+        tg.expand(); // Открываем казино на весь экран
 
-        // ✅ ЭТА ФУНКЦИЯ МАТЧИТ ФРОНТЕНД С БЭКЕНДОМ
+        // Функция отправки данных клика в ваш запущенный бот
         function selectCard(cardNumber) {
-            // Визуально подсвечиваем кликнутую карту
+            // Подсвечиваем оранжевым выбранную карту
             const cards = document.querySelectorAll('.card');
             cards.forEach(card => card.classList.remove('active'));
             cards[cardNumber - 1].classList.add('active');
 
-            // Моментально отправляем номер карты в Telegram, который передаст его бэкенду
+            // Небольшая задержка для анимации и жесткий посыл сигнала в терминал
             setTimeout(() => {
                 tg.sendData(cardNumber.toString());
-            }, 300);
+            }, 200);
         }
     </script>
 
