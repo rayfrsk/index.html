@@ -7,7 +7,7 @@
     <script src="https://telegram.org"></script>
     <style>
         body {
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            font-family: sans-serif;
             background: linear-gradient(135deg, #1e1e2f 0%, #111119 100%);
             color: #ffffff;
             display: flex;
@@ -18,10 +18,8 @@
             margin: 0;
         }
         h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
-            text-shadow: 0 0 10px #f39c12;
             color: #f39c12;
+            margin-bottom: 5px;
         }
         .subtitle {
             font-size: 14px;
@@ -46,36 +44,52 @@
             justify-content: center;
             font-size: 32px;
             cursor: pointer;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-            transition: transform 0.2s, border-color 0.2s;
+            transition: all 0.2s;
         }
-        .card:active {
-            transform: scale(0.95);
+        /* Включается при клике на карту */
+        .card.selected {
             border-color: #f39c12;
+            background: #f39c12;
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
 
     <h1>STARS CASINO 🎰</h1>
-    <div class="subtitle">Угадай карту! Попытка: 5 Stars</div>
+    <div class="subtitle">Выбери карту. Ставка: 5 Stars</div>
 
     <div class="card-container">
-        <div class="card" onclick="playGame(1)">❓</div>
-        <div class="card" onclick="playGame(2)">❓</div>
-        <div class="card" onclick="playGame(3)">❓</div>
+        <div class="card" id="c1" onclick="selectCard(1)">❓</div>
+        <div class="card" id="c2" onclick="selectCard(2)">❓</div>
+        <div class="card" id="c3" onclick="selectCard(3)">❓</div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        function playGame(cardNumber) {
-            // Передаем боту номер выбранной карты (например, "card_2")
-            tg.sendData("card_" + cardNumber);
-            // Закрываем Web App, чтобы юзер сразу увидел инвойс на оплату в чате
-            tg.close();
+        let selectedNumber = null;
+
+        function selectCard(num) {
+            selectedNumber = num;
+            
+            // Сбрасываем выделение со всех карт и красим выбранную
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+            document.getElementById('c' + num).classList.add('selected');
+
+            // Выкатываем большую нижнюю кнопку Телеграма
+            tg.MainButton.text = СТАВКА НА КАРТУ №${num} (5 ⭐️);
+            tg.MainButton.show();
         }
+
+        // Клик по большой нижней кнопке
+        tg.MainButton.onClick(() => {
+            if (selectedNumber) {
+                tg.sendData("card_" + selectedNumber); 
+                tg.close();
+            }
+        });
     </script>
 </body>
 </html>
